@@ -326,8 +326,8 @@
             <p><strong>Medical History: ${patient.medicalHistory?.medicalHistory}</strong></p>
             <p><strong>Life style: ${patient.lifestyle}</strong></p>
             <div class="buttons">
-              <button class="match" data-userId="${patient.user._id}">Match</button>
-              <button class="inquire" data-userId="${patient.user._id}">Inquire</button>
+              <a href='drconfirmmatch.html?patientId=${patient.user._id}' class="match" data-userId="${patient.user._id}">Match</a>
+              <a href='../patientsTabPage/DrInquire.html?patientId=${patient.user._id}' class="inquire" data-userId="${patient.user._id}">Inquire</a>
             </div>
             `;
 

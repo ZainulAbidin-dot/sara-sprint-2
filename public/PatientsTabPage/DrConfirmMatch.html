@@ -1,27 +1,52 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  
-  <link rel="stylesheet" href="DrConfirmMatch.css"> 
-  
+  <head>
+    <meta charset="UTF-8" />
 
-</head>
-<body>
-  <div class="success-container">
-    <h1>Are you sure you want to match to *insert patient name from db*:</h1>
-   
-    <a href="DrConfrimMatchFinal.html">
-        <button type="button"> Yes</button></a>
-        <!--<div class="user-info">
-        <p><strong>Name:</strong> <span id="user-name"></span></p>
-        <p><strong>Email:</strong> <span id="user-email"></span></p>
-        <p><strong>Phone:</strong> <span id="user-phone"></span></p>
-    </div>
-    to retrieve the user's infro from db--> 
-    <a href="PatientTabPage.html">
-            <button type="button">  No</button>
+    <link rel="stylesheet" href="DrConfirmMatch.css" />
+  </head>
+  <body>
+    <div class="success-container">
+      <h1>Are you sure you want to match to <span id="name"></span></h1>
+
+      <a id="confirm-link" style="margin-bottom: 1rem; display: block">
+        <button type="button">Yes</button>
       </a>
-  </div>
-</body>
+      <a id="cancel-link">
+        <button type="button">No</button>
+      </a>
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const urlParams = new URLSearchParams(window.location.search);
+          const patientId = urlParams.get('patientId');
+          if (patientId) {
+            document.getElementById('confirm-link').href =
+              `DrConfrimMatchFinal.html?patientId=${patientId}`;
+            document.getElementById('cancel-link').href =
+              `PatientTabPage.html?patientId=${patientId}`;
+          }
+        });
+      </script>
+    </div>
+  </body>
+  <script type="module">
+    import { fetchData } from '/js/http-calls.js';
+
+    async function init() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const patientId = urlParams.get('patientId');
+      if (patientId) {
+        const patientData = await fetchData(`/api/patients/${patientId}`);
+        if (patientData.isOk) {
+          console.log(patientData.data);
+          const patientName = document.getElementById('name');
+          patientName.innerText = patientData.data.name;
+        }
+      } else {
+        console.error('No patient ID found in the URL');
+      }
+    }
+
+    init();
+  </script>
 </html>
