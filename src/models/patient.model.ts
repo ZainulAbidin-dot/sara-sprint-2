@@ -12,6 +12,7 @@ export interface IPatient extends Document {
     relation: string;
     phoneNumber: string;
   };
+  medicalHistory?: any;
 }
 
 const PatientSchema = new Schema<IPatient>(
