@@ -734,6 +734,7 @@
         });
 
         if (response.isOk) {
+          localStorage.setItem('user', JSON.stringify(response.data.user));
           window.location.href = '/SignUp/Dr-ConfirmSignUp.html';
         } else {
           const errorDiv = document.createElement('div');

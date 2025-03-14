@@ -862,7 +862,7 @@
         });
 
         if (response.isOk) {
-          //TODO: redirect to success page
+          localStorage.setItem('user', JSON.stringify(response.data.user));
           window.location.href = '/SignUp/P-Confirmation.html';
         } else {
           const errorDiv = document.createElement('div');

@@ -10,6 +10,7 @@ export interface IUser extends Document {
   phoneNumber: string;
   title: string;
   nationality: string;
+  otp?: string;
   userType: 'patient' | 'doctor' | 'donorAcquirer';
 }
 
@@ -24,6 +25,7 @@ const UserSchema = new Schema<IUser>(
     phoneNumber: { type: String, required: true },
     title: { type: String, required: true },
     nationality: { type: String, required: true },
+    otp: { type: String },
     userType: {
       type: String,
       enum: ['patient', 'doctor', 'donorAcquirer'],

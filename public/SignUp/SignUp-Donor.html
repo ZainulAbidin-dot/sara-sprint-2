@@ -369,7 +369,8 @@
         });
 
         if (response.isOk) {
-          window.location.href = '/SingUp/Dn-ConfirmSignUp.html';
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+          window.location.href = '/SignUp/Dn-ConfirmSignUp.html';
         } else {
           const errorDiv = document.createElement('div');
           errorDiv.classList.add('error');

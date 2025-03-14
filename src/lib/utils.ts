@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import type { ZodError } from 'zod';
@@ -23,4 +24,8 @@ export default function formatZodError(error: ZodError) {
     .join('\n');
 
   return { conciseErrorMessages, errorObject };
+}
+
+export function generateOTP(): string {
+  return crypto.randomInt(100000, 999999).toString();
 }

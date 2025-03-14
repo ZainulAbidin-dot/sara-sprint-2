@@ -43,13 +43,13 @@ const requestHandler: AppRequestHandler<TSignupRequest> = async ({
   );
   requestBody.userDetails.password = hashedPassword;
 
-  let userId: string | null = null;
+  let user: mongoose.Document | null = null;
   if (requestBody.userType === 'patient') {
-    userId = await handlePatientCreate(requestBody);
+    user = await handlePatientCreate(requestBody);
   } else if (requestBody.userType === 'doctor') {
-    userId = await handleDoctorCreate(requestBody);
+    user = await handleDoctorCreate(requestBody);
   } else if (requestBody.userType === 'donorAcquirer') {
-    userId = await handleDonorAcquirerCreate(requestBody);
+    user = await handleDonorAcquirerCreate(requestBody);
   } else {
     throw new HttpError({
       message: 'Invalid user type',
@@ -58,13 +58,17 @@ const requestHandler: AppRequestHandler<TSignupRequest> = async ({
     });
   }
 
-  if (userId) {
+  if (user) {
     // create session for this user.
-    request.session.userId = userId;
+    request.session.userId = user._id as string;
+
+    const { password, ...userDetails } = user.toObject();
 
     return new ApiSuccessResponse({
       message: 'User registered successfully',
-      data: null,
+      data: {
+        user: userDetails,
+      },
       statusCode: 201,
     });
   } else {
@@ -125,7 +129,7 @@ async function handlePatientCreate(
 
     await session.commitTransaction();
 
-    return user._id as string;
+    return user;
   } catch (error) {
     await session.abortTransaction();
     throw error;
@@ -164,7 +168,7 @@ async function handleDoctorCreate(
 
     await session.commitTransaction();
 
-    return user._id as string;
+    return user;
   } catch (error) {
     await session.abortTransaction();
     throw error;
@@ -183,17 +187,17 @@ async function handleDonorAcquirerCreate(
 
     const user = await new UserModel({
       ...data.userDetails,
-      userType: 'doctor',
+      userType: 'donorAcquirer',
     }).save({ session });
 
-    const donorAcquirer = await new DonorAcquirerModel({
+    await new DonorAcquirerModel({
       ...data.donorAcquirerDetails,
       user: user._id,
     }).save({ session });
 
     await session.commitTransaction();
 
-    return user._id as string;
+    return user;
   } catch (error) {
     await session.abortTransaction();
     throw error;
