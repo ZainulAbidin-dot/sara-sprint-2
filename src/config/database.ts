@@ -1,25 +1,23 @@
-import { MongoClient, ServerApiVersion } from "mongodb";
+import mongoose from 'mongoose';
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const uri = process.env.MONGO_URI as string;
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
 
-async function connectDB() {
+const connectDB = async () => {
   try {
-    await client.connect();
-    console.log("✅ Connected to MongoDB!");
-  } catch (error) {
-    console.error("❌ MongoDB connection failed:", error);
-    process.exit(1);
-  }
-}
+    // Connect to MongoDB using Mongoose
+    const conn = await mongoose.connect(uri);
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
 
-export { client, connectDB };
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error('❌ MongoDB connection failed:', error.message);
+    } else {
+      console.error('❌ MongoDB connection failed:', error);
+    }
+  } 
+};
+
+export default connectDB;
