@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGO_URI")
+}
+
+model User {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String   @unique
+  password    String
+  gender      String?
+  nationality String?
+  userType    UserType
+  phoneNumbers String[]
+  feedback    Feedback[]
+  doctor      Doctor?
+  patientHistory PatientMedicalHistory?
+  donorItems  Item[]
+  messagesSent Message[] @relation("SenderRelation")
+  messagesReceived Message[] @relation("RecipientRelation")
+  bookings    Booking[]
+}
+
+enum UserType {
+  Patient
+  Doctor
+  Donor
+  Acquirer
+}
+
+model Feedback {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String  @db.ObjectId
+  user     User    @relation(fields: [userId], references: [id])
+  email    String
+  name     String
+  comments String
+}
+
+model Doctor {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @unique @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id])
+  specialization String
+  license        String   @unique
+  institute      String
+  trials        Trial[]
+}
+
+model PatientMedicalHistory {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  patientId   String   @unique @db.ObjectId
+  patient     User     @relation(fields: [patientId], references: [id])
+  allergies   String[]
+  height      Float?
+  weight      Float?
+  lifestyle   String?
+  diseases    Disease[]
+}
+
+model Disease {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  historyId        String   @db.ObjectId
+  patientHistory   PatientMedicalHistory @relation(fields: [historyId], references: [id])
+  diseaseName      String
+  dateOfDiagnosis  DateTime
+  diseaseType      String?
+  familyHistory    Boolean?
+}
+
+model Item {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  itemName         String
+  description      String
+  yearsOfUse       Int
+  warranty         Boolean?
+  defects          String?
+  pointOfContactId String  @db.ObjectId
+  pointOfContact   User     @relation(fields: [pointOfContactId], references: [id])
+}
+
+model Trial {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  trialDescription  String
+  conductedById     String  @db.ObjectId
+  conductedBy       Doctor  @relation(fields: [conductedById], references: [id])
+  duration          Int
+  status            TrialStatus
+  riskLevel         String?
+  bookings         Booking[]
+}
+
+enum TrialStatus {
+  Pending
+  Ongoing
+  Completed
+}
+
+model Lab {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  labName  String
+  testType String
+}
+
+model Message {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  senderId     String   @db.ObjectId
+  sender       User     @relation(fields: [senderId], references: [id], name: "SenderRelation")
+  recipientId  String   @db.ObjectId
+  recipient    User     @relation(fields: [recipientId], references: [id], name: "RecipientRelation")
+  content      String
+  date         DateTime @default(now())
+}
+
+model Booking {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  bookedById      String   @db.ObjectId
+  bookedBy        User     @relation(fields: [bookedById], references: [id])
+  trialId         String   @db.ObjectId
+  trial           Trial    @relation(fields: [trialId], references: [id])
+  bookingDateTime DateTime
+}
