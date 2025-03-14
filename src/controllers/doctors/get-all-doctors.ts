@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
+import { DoctorModel } from '@/models/doctor.model.js';
 import { MatchModel } from '@/models/match.model.js';
-import { PatientMedicalHistoryModel } from '@/models/medicalHistory.model.js';
-import { PatientModel } from '@/models/patient.model.js';
+import { TrialModel } from '@/models/trial.model.js';
 import { UserModel } from '@/models/user.model.js';
 
 import { ApiSuccessResponse } from '@/lib/api-response.js';
@@ -37,34 +37,43 @@ const requestHandler: AppRequestHandler<TGetAllDiseaseRequest> = async ({
     return match.user1;
   });
 
-  const patients = await PatientModel.find({
-    user: { $nin: myMatchedUserIds },
-  })
-    .populate('user')
-    .lean();
-  const patientsWithHistory = [];
+  const doctors = await UserModel.find({
+    _id: { $nin: myMatchedUserIds },
+    userType: 'doctor',
+  }).lean();
 
-  for (const patient of patients) {
-    const medicalHistory = await PatientMedicalHistoryModel.findOne({
-      patient: patient._id,
-    })
-      .populate('disease')
-      .lean();
+  const doctorProfiles: any[] = [];
 
-    patientsWithHistory.push({
-      ...patient,
-      medicalHistory: medicalHistory || null,
+  for (const doctor of doctors) {
+    const doctorProfile = await DoctorModel.findOne({
+      user: doctor._id,
+    }).lean();
+
+    if (!doctorProfile) continue;
+
+    const trial = await TrialModel.findOne({
+      conductedBy: doctorProfile?._id,
+    }).lean();
+
+    if (!trial) continue;
+
+    doctorProfiles.push({
+      userId: doctor._id,
+      name: doctor.name,
+      specialization: doctorProfile?.specialization,
+      riskLevel: trial?.riskLevel,
+      duration: trial?.duration,
     });
   }
 
   return new ApiSuccessResponse({
     statusCode: 200,
-    data: patientsWithHistory,
+    data: doctorProfiles,
     message: 'Patients fetched successfully',
   });
 };
 
-export const getAllPatients = {
+export const getAllDoctors = {
   requestSchema,
   requestHandler,
 };

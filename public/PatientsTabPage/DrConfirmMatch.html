@@ -9,32 +9,25 @@
     <div class="success-container">
       <h1>Are you sure you want to match to <span id="name"></span></h1>
 
-      <a id="confirm-link" style="margin-bottom: 1rem; display: block">
-        <button type="button">Yes</button>
-      </a>
-      <a id="cancel-link">
+      <button
+        type="button"
+        style="margin-bottom: 1rem; display: block"
+        id="confirmButton"
+      >
+        Yes
+      </button>
+      <a id="cancel-link" href="PatientTabPage.html">
         <button type="button">No</button>
       </a>
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const urlParams = new URLSearchParams(window.location.search);
-          const patientId = urlParams.get('patientId');
-          if (patientId) {
-            document.getElementById('confirm-link').href =
-              `DrConfrimMatchFinal.html?patientId=${patientId}`;
-            document.getElementById('cancel-link').href =
-              `PatientTabPage.html?patientId=${patientId}`;
-          }
-        });
-      </script>
     </div>
   </body>
   <script type="module">
-    import { fetchData } from '/js/http-calls.js';
+    import { fetchData, postData } from '/js/http-calls.js';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const patientId = urlParams.get('patientId');
 
     async function init() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const patientId = urlParams.get('patientId');
       if (patientId) {
         const patientData = await fetchData(`/api/patients/${patientId}`);
         if (patientData.isOk) {
@@ -48,5 +41,19 @@
     }
 
     init();
+
+    const confirmButton = document.getElementById('confirmButton');
+
+    confirmButton.addEventListener('click', async () => {
+      const data = {
+        userId: patientId,
+      };
+      const response = await postData('/api/match', data);
+      if (response.isOk) {
+        window.location.href = `DrConfrimMatchFinal.html?patientId=${patientId}`;
+      } else {
+        alert(response.message);
+      }
+    });
   </script>
 </html>
