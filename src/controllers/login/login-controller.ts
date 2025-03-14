@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 import { UserModel } from '@/models/user.model.js';
 
+import { EmailService } from '@/services/email-service.js';
+
 import { ApiSuccessResponse } from '@/lib/api-response.js';
 import { AppRequestHandler } from '@/lib/app-request-handler.js';
 import HttpError from '@/lib/http-error.js';
@@ -48,10 +50,15 @@ const requestHandler: AppRequestHandler<TLoginRequest> = async ({
 
   const otp = generateOTP();
 
-  // save otp to user
   await UserModel.updateOne({ _id: existingUser._id }, { otp });
 
   // TODO: send otp to user via email
+  const emailService = EmailService.getInstance();
+  await emailService.sendOtpEmail({
+    name: existingUser.name,
+    email: existingUser.email,
+    otp: otp,
+  });
 
   return new ApiSuccessResponse({
     message: 'User logged in successfully',

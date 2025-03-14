@@ -863,7 +863,7 @@
 
         if (response.isOk) {
           localStorage.setItem('user', JSON.stringify(response.data.user));
-          window.location.href = '/SignUp/P-Confirmation.html';
+          window.location.href = '/SignUp/P-ConfirmSignUp.html';
         } else {
           const errorDiv = document.createElement('div');
           errorDiv.classList.add('error');

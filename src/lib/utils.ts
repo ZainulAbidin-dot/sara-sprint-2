@@ -9,6 +9,10 @@ export function getPublicPath() {
   return path.resolve(__dirname, '..', '..', 'public');
 }
 
+export function getEmailTemplatePath(template: string) {
+  return path.resolve(__dirname, '..', '..', 'email-templates', template);
+}
+
 export default function formatZodError(error: ZodError) {
   const fieldErrors = error.issues;
 

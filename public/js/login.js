@@ -13,7 +13,9 @@ export async function login({ email, password, userType }) {
     localStorage.setItem('email', email);
     localStorage.setItem('userType', userType);
 
-    // redirect user to otp page.
+    alert(
+      `OTP has been sent to your email. Please enter the OTP to login. Your OTP is ${loginResponse.data.otp}`
+    );
 
     if (userType === 'doctor') {
       window.location.href = '/Login-OTP/Dr-OTPpage.html';
