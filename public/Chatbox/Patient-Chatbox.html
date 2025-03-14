@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="chatbox.css">
+    <link rel="stylesheet" href="../PostHeader/PostHeader.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <span>T</span>ADAWI
+        </div>
+        <nav class="nav">
+            <a href="../Home/HomePage-Patient.html">Home</a>
+            <a href="../ClinicalTrialPage/CTpage.html">Clinical Trials</a>
+            <a href="../MatchesPage/PatientMatchesPage.html">Matches</a>
+            <a href="../About-us/About-usPostPatient.html">About us</a>
+            <a href="../HelpPage/Help-Patient.html">Help</a>
+            <a href="../NotificationsPage/P-NotifPage.html">Notifications</a>
+        </nav>
+        
+        <div class="buttons-container">
+            <img src="../img/download.png" alt="Notifications" id="notif-bell">
+
+            <!-- Sign Out Button -->
+            <a href="../Home/HomePage.html" id="signout-btn">
+                <button>Sign Out</button>
+            </a>
+
+            <!-- Edit Profile Button -->
+            <a href="../EditProfile/EditProfile-Patient.html">
+                <button id="edit-btn">Edit Profile</button>
+            </a>
+        </div>
+    </header>
+
+    <div class="chat-container">
+        <div class="user-list">
+            <h2>Chats</h2>
+            <div class="user" onclick="openChat('John Doe')">John Doe</div>
+            <div class="user" onclick="openChat('Jane Smith')">Jane Smith</div>
+            <div class="user" onclick="openChat('Mike Johnson')">Mike Johnson</div>
+        </div>
+        <div class="chat-box">
+            <div class="chat-header" id="chat-header">John Doe</div>
+            <div class="messages" id="messages">
+                <div class="message received">Hello!</div>
+                <div class="message sent">Hey there!</div>
+            </div>
+            <div class="message-input">
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openChat(userName) {
+            document.getElementById('chat-header').innerText = userName;
+            document.getElementById('messages').innerHTML = '';
+        }
+
+        function sendMessage() {
+            let messageBox = document.getElementById('message-input');
+            let messageText = messageBox.value.trim();
+            if (messageText !== '') {
+                let messageContainer = document.getElementById('messages');
+                let newMessage = document.createElement('div');
+                newMessage.classList.add('message', 'sent');
+                newMessage.innerText = messageText;
+                messageContainer.appendChild(newMessage);
+                messageBox.value = '';
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,32 +1,36 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IPatientMedicalHistory extends Document {
-    patient: mongoose.Types.ObjectId;
-    allergies?: string[];
-    height?: number;
-    weight?: number;
-    lifestyle?: string;
-    diseases: {
-      diseaseName: string;
-      dateOfDiagnosis: Date;
-      diseaseType?: string;
-      familyHistory?: boolean;
-    }[];
-  }
-  
-  const PatientMedicalHistorySchema = new Schema<IPatientMedicalHistory>({
-    patient: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    allergies: [{ type: String }],
-    height: { type: Number },
-    weight: { type: Number },
-    lifestyle: { type: String },
-    diseases: [{
-      diseaseName: { type: String, required: true },
-      dateOfDiagnosis: { type: Date, required: true },
-      diseaseType: { type: String },
-      familyHistory: { type: Boolean }
-    }]
-  }, { timestamps: true });
-  
-  export default mongoose.model<IPatientMedicalHistory>("PatientMedicalHistory", PatientMedicalHistorySchema);
-  
+  patient: mongoose.Types.ObjectId;
+  medicalHistory?: string;
+  disease: mongoose.Types.ObjectId;
+  medicinalHistory?: string;
+  familyHistory?: string;
+  currentExperiencedSymptoms?: string;
+}
+
+const PatientMedicalHistorySchema = new Schema<IPatientMedicalHistory>(
+  {
+    patient: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    medicalHistory: { type: String },
+    disease: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'DiseaseType',
+      required: true,
+    },
+    medicinalHistory: { type: String },
+    familyHistory: { type: String },
+    currentExperiencedSymptoms: { type: String },
+  },
+  { timestamps: true }
+);
+
+export const PatientMedicalHistoryModel =
+  mongoose.model<IPatientMedicalHistory>(
+    'PatientMedicalHistory',
+    PatientMedicalHistorySchema
+  );

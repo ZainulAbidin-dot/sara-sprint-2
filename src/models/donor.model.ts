@@ -1,16 +1,19 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IDonorAcquirer extends Document {
-    user: mongoose.Types.ObjectId;
-    itemGiven?: boolean;
-    donationDate?: Date;
-  }
-  
-  const DonorAcquirerSchema = new Schema<IDonorAcquirer>({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    itemGiven: { type: Boolean, default: false },
-    donationDate: { type: Date }
-  }, { timestamps: true });
-  
-  export default mongoose.model<IDonorAcquirer>("DonorAcquirer", DonorAcquirerSchema);
-  
+  user: mongoose.Types.ObjectId;
+  role: 'donor' | 'acquirer' | 'both';
+}
+
+const DonorAcquirerSchema = new Schema<IDonorAcquirer>(
+  {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    role: { type: String, enum: ['donor', 'acquirer', 'both'], required: true },
+  },
+  { timestamps: true }
+);
+
+export const DonorAcquirerModel = mongoose.model<IDonorAcquirer>(
+  'DonorAcquirer',
+  DonorAcquirerSchema
+);

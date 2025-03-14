@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+    <link rel="stylesheet" href="DonationsPage.css">
+    <link rel="stylesheet" href="../PostHeader/PostHeader.css">
+    <link rel="stylesheet" href="../Prefooter/Prefooter.css">
+    <link rel="stylesheet" href="../Prefooter/Prefooter.js">
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+
+<head> 
+
+<meta charset="utf-8">
+
+
+</head>
+
+<body> 
+    <header class="header">
+        <div class="header-logo">
+            <span>T</span>ADAWI
+        </div>
+        <nav class="nav">
+            <a href="../Home/HomePage-Donor.html">Home</a>
+            <a href="../About-us/About-usPostDonor.html">About us</a>
+            <a href="../DonationsPgae/DonationsPage.html">Donations</a>
+            <a href="../HelpPage/Help-Donor.html">Help</a>
+            <a href="NewDonation.html">New Donation</a>
+            <a href="../NotificationsPage/Donor-NotifPage.html">Notifications</a>
+
+        </nav>
+        <div class="buttons-container">
+            <img src=""  id="">
+
+         
+
+            <!-- Sign Out Button -->
+            <a href="../Home/HomePage.html" id="signout-btn">
+                <button>Sign Out</button>
+            </a>
+
+            <!-- Edit Profile Button -->
+            <a href="../EditProfile/EditProfile-Donor.html">
+                <button id="edit-btn">Edit Profile</button>
+            </a>
+        </div>
+    </header>
+
+    
+
+    <div class="filter-container">
+        <label for="filter"><strong>Filter:</strong></label>
+        <input type="text" id="filter" placeholder="ex: age, gender, disease">
+    </div>
+
+    <div class="container">
+        <div class="card" data-equipment="Medical Monitor" data-years="2" >
+            <p><strong>Name of Equipment: </strong></p>
+            <p><strong>Years of Use: Two Years</strong></p>
+            <p><strong>Reason for Donation: No need for it anymore</strong></p>
+            
+            <div class="buttons">
+                <button class="contact">Contact</button>
+            </div>
+        </div>
+        
+        <div class="card" data-equipment="Medical Monitor" data-years="2" >
+            <p><strong>Name of Equipment: </strong></p>
+            <p><strong>Years of Use: Two Years</strong></p>
+            <p><strong>Reason for Donation: No need for it anymore</strong></p>
+            
+            <div class="buttons">
+                <button class="contact">Contact to Acquire</button>
+            </div>
+        </div>
+
+        <div class="card" data-equipment="Medical Monitor" data-years="2" >
+            <p><strong>Name of Equipment: </strong></p>
+            <p><strong>Years of Use: Two Years</strong></p>
+            <p><strong>Reason for Donation: No need for it anymore</strong></p>
+            
+            <div class="buttons">
+                <button class="contact">Contact to Acquire</button>
+            </div>
+        </div>
+
+        <div class="card" data-equipment="Medical Monitor" data-years="2" >
+            <p><strong>Name of Equipment: </strong></p>
+            <p><strong>Years of Use: Two Years</strong></p>
+            <p><strong>Reason for Donation: No need for it anymore</strong></p>
+            
+            <div class="buttons">
+                <button class="contact">Contact to Acquire</button>
+            </div>
+        </div>
+
+        <div class="card" data-equipment="Medical Monitor" data-years="2" >
+            <p><strong>Name of Equipment: </strong></p>
+            <p><strong>Years of Use: Two Years</strong></p>
+            <p><strong>Reason for Donation: No need for it anymore</strong></p>
+            
+            <div class="buttons">
+                <button class="contact">Contact to Acquire</button>
+            </div>
+        </div>
+        
+        
+    </div>
+    <script>
+     
+
+document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".contact").forEach(button => {
+            button.addEventListener("click", function() {
+                window.location.href = "contacttoacquire.html";
+            });
+        });
+    });
+    
+    document.getElementById("signout-btn").addEventListener("click", function(event) {
+        event.preventDefault(); // Prevent immediate redirection
+        alert("You have signed out!"); 
+        window.location.href = "../Home/HomePage.html"; // Redirect after alert, same effect as the signout redirect in html in header
+    });
+
+        //underline the current tab
+    document.addEventListener("DOMContentLoaded", function () {
+        let currentLocation = window.location.pathname.split("/").pop();
+        let navLinks = document.querySelectorAll(".nav a");
+
+        navLinks.forEach(link => {
+            if (link.getAttribute("href").includes(currentLocation)) {
+                link.classList.add("active");
+            } else {
+                link.classList.remove("active");
+            }
+        });
+    });
+
+    
+    document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("filter").addEventListener("input", function () {
+        const filterValue = this.value.toLowerCase();
+        const cards = document.querySelectorAll(".card");
+
+        cards.forEach(card => {
+            const equipment = card.getAttribute("data-equipment").toLowerCase();
+            const years = card.getAttribute("data-years"); // Keep as string
+            
+
+            if (
+                equipment.includes(filterValue) || 
+                years.includes(filterValue) 
+            ) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    });
+});
+
+    </script>
+    <footer class="footer">
+        <div class="columns">
+            <div class="column">
+                <h3>Providers</h3>
+                <p>MedNova Pharma</p>
+                <p>BioGenesis Pharma</p>
+                <p>CureTech Solutions</p>
+                <p>LifeBridge Investments</p>
+                <p>MedStrive Holdings</p>
+                <p>SummitCare Hospital</p>
+            </div>
+            <div class="column">
+                <h3>Publications</h3>
+                <p>The Journal of Global Health Insights</p>
+                <p>Biotech Review</p>
+                <p>PharmaProgress</p>
+                <p>Innovative Medical Research</p>
+                <p>Future of Healthcare</p>
+            </div>
+            <div class="column">
+                <h3>Investors</h3>
+                <p>CapitalCore Ventures</p>
+                <p>SilverStone Investments</p>
+                <p>Pioneer Growth Partners</p>
+                <p>Summit Ridge Capital</p>
+                <p>Horizon Equity Group</p>
+            </div>
+        </div>
+        <div class="contact">
+            Contact us at : <a href="mailto:tadawi@gmail.com">tadawi.contact@gmail.com</a>
+        </div>
+        <div class="logos">
+           
+            <img src="../img/vision2030-saudi-arabia-Logo-PNG-Transparent-Background.png" alt="Logo 2">
+            <img src="../img/logo (1).png" alt="Logo 3">
+            <img src="../img/image-removebg-preview.png" alt="Logo 4">
+        </div>
+    </footer>
+  
+</body>
+</html>

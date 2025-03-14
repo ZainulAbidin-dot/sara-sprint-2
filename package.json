@@ -2,29 +2,41 @@
   "name": "server2",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "seed": "tsx scripts/seeders/seed.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "bcrypt": "^5.1.1",
+    "connect-mongo": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
     "express": "^4.21.2",
+    "express-async-errors": "^3.1.1",
+    "express-session": "^1.18.1",
     "mongodb": "^6.14.2",
     "mongoose": "^8.12.1",
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/express-session": "^1.18.1",
     "@types/node": "^22.13.10",
     "nodemon": "^3.1.9",
-    "ts-node": "^10.9.2",
+    "prettier": "^3.5.3",
+    "tsc-alias": "^1.8.11",
+    "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }
 }

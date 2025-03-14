@@ -1,20 +1,30 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Document, Schema } from 'mongoose';
 
 export interface ITrial extends Document {
-    trialDescription: string;
-    conductedBy: mongoose.Types.ObjectId;
-    duration: number;
-    status: string;
-    riskLevel?: string;
-  }
-  
-  const TrialSchema = new Schema<ITrial>({
+  conductedBy: mongoose.Types.ObjectId;
+  trialDescription: string;
+  trialRequirements: string;
+  duration: number;
+  riskLevel: 'low' | 'medium' | 'high';
+}
+
+const TrialSchema = new Schema<ITrial>(
+  {
+    conductedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Doctor',
+      required: true,
+    },
     trialDescription: { type: String, required: true },
-    conductedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Doctor", required: true },
+    trialRequirements: { type: String, required: true },
     duration: { type: Number, required: true },
-    status: { type: String, required: true, enum: ["Pending", "Ongoing", "Completed"] },
-    riskLevel: { type: String }
-  }, { timestamps: true });
-  
-  export default mongoose.model<ITrial>("Trial", TrialSchema);
-  
+    riskLevel: {
+      type: String,
+      required: true,
+      enum: ['low', 'medium', 'high'],
+    },
+  },
+  { timestamps: true }
+);
+
+export const TrialModel = mongoose.model<ITrial>('Trial', TrialSchema);

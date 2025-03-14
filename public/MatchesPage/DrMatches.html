@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="DrMatches.css">
+    <link rel="stylesheet" href="../PostHeader/PostHeader.css">
+    <link rel="stylesheet" href="../Prefooter/Prefooter.css">
+    <link rel="stylesheet" href="../Prefooter/Prefooter.js">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <span>T</span>ADAWI
+        </div>
+        <nav class="nav">
+             <!--<div class="container" id="trials-container"></div> to retrieve the info from db-->
+            <a href="../Home/HomePage-Dr.html">Home</a>
+            <a href="../PatientsTabPage/PatientTabPage.html">Patients</a>
+            <a href="../MatchesPage/DrMatches.html">Matches</a>
+            <a href="../About-us/About-usPostDr.html">About us</a>
+            <a href="../LabPage/Lab.html">Labs</a>
+            <a href="../HelpPage/Help-Dr.html">Help</a>
+            <a href="../NotificationsPage/DR-NotifPage.html">Notifications</a>
+        </nav>
+        
+        <div class="buttons-container">
+            <img src=""  id="">
+
+            <a href="../Chatbox/Dr-Chatbox.html" id="chatbox">
+                <button>ChatBox</button>
+
+            <!-- Sign Out Button -->
+            <a href="../Home/HomePage.html" id="signout-btn">
+                <button>Sign Out</button>
+            </a>
+
+            <!-- Edit Profile Button -->
+            <a href="../EditProfile/EditProfile-Doctor.html">
+                <button id="edit-btn">Edit Profile</button>
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <p><strong>Age: 55</strong></p>
+            <p><strong>Gender: Female</strong></p>
+            <p><strong>Disease: Breast Cancer</strong></p>
+            <p><strong>Region: Riyadh </strong></p>
+            
+            <div class="buttons">
+                <button class="Confirm">Confirm & Contact</button>
+                <button class="Deny">Deny</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <p><strong>Age: 55</strong></p>
+            <p><strong>Gender: Female</strong></p>
+            <p><strong>Disease: Breast Cancer</strong></p>
+            <p><strong>Region: Riyadh </strong></p>
+            
+            <div class="buttons">
+                <button class="Confirm">Confirm & Contact</button>
+                <button class="Deny">Deny</button>
+            </div>
+        </div>
+        <div class="card">
+            <p><strong>Age: 55</strong></p>
+            <p><strong>Gender: Female</strong></p>
+            <p><strong>Disease: Breast Cancer</strong></p>
+            <p><strong>Region: Riyadh </strong></p>
+            
+            <div class="buttons">
+                <button class="Confirm">Confirm & Contact</button>
+                <button class="Deny">Deny</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <p><strong>Age: 55</strong></p>
+            <p><strong>Gender: Female</strong></p>
+            <p><strong>Disease: Breast Cancer</strong></p>
+            <p><strong>Region: Riyadh </strong></p>
+            
+            <div class="buttons">
+                <button class="Confirm">Confirm & Contact</button>
+                <button class="Deny">Deny</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        
+document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".Deny").forEach(button => {
+            button.addEventListener("click", function() {
+                window.location.href = "../matchespage/Drdenymatch.html";
+            });
+        });
+
+        document.querySelectorAll(".Confirm").forEach(button => {
+            button.addEventListener("click", function() {
+                window.location.href = "../patientstabpage/drconfirmmatch.html";
+            });
+        });
+    });
+    
+    document.getElementById("signout-btn").addEventListener("click", function(event) {
+        event.preventDefault(); // Prevent immediate redirection
+        alert("You have signed out!"); 
+        window.location.href = "../Home/HomePage.html"; // Redirect after alert, same function as what the html header redirect does
+    });
+
+    //underline the current tab
+    document.addEventListener("DOMContentLoaded", function () {
+        let currentLocation = window.location.pathname.split("/").pop();
+        let navLinks = document.querySelectorAll(".nav a");
+
+        navLinks.forEach(link => {
+            if (link.getAttribute("href").includes(currentLocation)) {
+                link.classList.add("active");
+            } else {
+                link.classList.remove("active");
+            }
+        });
+    });
+    </script>
+    <footer class="footer">
+        <div class="columns">
+            <div class="column">
+                <h3>Providers</h3>
+                <p>MedNova Pharma</p>
+                <p>BioGenesis Pharma</p>
+                <p>CureTech Solutions</p>
+                <p>LifeBridge Investments</p>
+                <p>MedStrive Holdings</p>
+                <p>SummitCare Hospital</p>
+            </div>
+            <div class="column">
+                <h3>Publications</h3>
+                <p>The Journal of Global Health Insights</p>
+                <p>Biotech Review</p>
+                <p>PharmaProgress</p>
+                <p>Innovative Medical Research</p>
+                <p>Future of Healthcare</p>
+            </div>
+            <div class="column">
+                <h3>Investors</h3>
+                <p>CapitalCore Ventures</p>
+                <p>SilverStone Investments</p>
+                <p>Pioneer Growth Partners</p>
+                <p>Summit Ridge Capital</p>
+                <p>Horizon Equity Group</p>
+            </div>
+        </div>
+        <div class="contact">
+            Contact us at : <a href="mailto:tadawi@gmail.com">tadawi.contact@gmail.com</a>
+        </div>
+        <div class="logos">
+            
+            <img src="../img/vision2030-saudi-arabia-Logo-PNG-Transparent-Background.png" alt="Logo 2">
+            <img src="../img/logo (1).png" alt="Logo 3">
+            <img src="../img/image-removebg-preview.png" alt="Logo 4">
+        </div>
+    </footer>
+</body>
+</html>

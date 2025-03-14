@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+    <link rel="stylesheet" href="DrDenyMatch.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Request Denied</h2>
+        <p class="subtext">Please specify the reason for denial:</p>
+        <select id="denial-reason">
+            <option value="">Select a reason</option>
+            <option value="out-of-jurisdiction">Out of jurisdiction</option>
+            <option value="fully-booked">Fully booked</option>
+            <option value="medical-reasons">Medical Reasons</option>
+            <option value="other">Other</option>
+        </select>
+        
+        <p class="subtext">Do you want to add any additional notes?</p>
+        <textarea id="additional-notes" placeholder="Enter your notes here..."></textarea>
+        
+        <button id="submit-btn">Submit</button>
+    </div>
+
+    <script>
+        document.getElementById("submit-btn").addEventListener("click", function() {
+            const reason = document.getElementById("denial-reason").value;
+            if (!reason) {
+                alert("Please select a reason for denial.");
+                return;
+            }
+            window.location.href = "successdenysubmit.html";
+        });
+    </script>
+</body>
+</html>
