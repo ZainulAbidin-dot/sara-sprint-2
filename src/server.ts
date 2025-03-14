@@ -13,6 +13,7 @@ import { getPublicPath } from '@/lib/utils.js';
 
 import AuthRouter from '@/routes/auth.routes.js';
 import DiseaseRouter from '@/routes/disease.routes.js';
+import PatientRouter from '@/routes/patient.routes.js';
 
 import errorHandler from '@/middleware/errorHandler.js';
 
@@ -54,6 +55,7 @@ app.get('/', (request, response) => {
 
 app.use('/api/auth', AuthRouter);
 app.use('/api/diseases', DiseaseRouter);
+app.use('/api/patients', PatientRouter);
 
 // middleware to handle errors
 app.use(errorHandler);

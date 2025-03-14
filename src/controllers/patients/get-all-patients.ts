@@ -11,18 +11,25 @@ const requestSchema = z.object({});
 type TGetAllDiseaseRequest = z.infer<typeof requestSchema>;
 
 const requestHandler: AppRequestHandler<TGetAllDiseaseRequest> = async ({}) => {
-  const patients = await PatientModel.find().populate('user');
+  const patients = await PatientModel.find().populate('user').lean();
+  const patientsWithHistory = [];
 
   for (const patient of patients) {
-    const medicalHistory = await PatientMedicalHistoryModel.find({
+    const medicalHistory = await PatientMedicalHistoryModel.findOne({
       patient: patient._id,
+    })
+      .populate('disease')
+      .lean();
+
+    patientsWithHistory.push({
+      ...patient,
+      medicalHistory: medicalHistory || null,
     });
-    patient.medicalHistory = medicalHistory;
   }
 
   return new ApiSuccessResponse({
     statusCode: 200,
-    data: patients,
+    data: patientsWithHistory,
     message: 'Patients fetched successfully',
   });
 };
