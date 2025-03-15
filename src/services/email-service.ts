@@ -7,18 +7,19 @@ export class EmailService {
   private static instance: EmailService;
   private transporter: nodemailer.Transporter;
   private emailFrom: string;
+  private emailActive: boolean;
 
   private constructor() {
     const emailUser = process.env.EMAIL_USER as string;
     const emailPassword = process.env.EMAIL_PASSWORD as string;
     const emailPortParsed = process.env.EMAIL_PORT as string;
     const emailHost = process.env.EMAIL_HOST as string;
-    const clientUrl = process.env.CLIENT_URL as string;
     const emailFrom = process.env.EMAIL_FROM as string;
+    const emailActive = process.env.EMAIL_ACTIVE === 'true';
     const secure = emailPortParsed === '465';
 
     this.emailFrom = emailFrom;
-
+    this.emailActive = emailActive;
     this.transporter = nodemailer.createTransport({
       host: emailHost,
       port: parseInt(emailPortParsed),
@@ -49,6 +50,9 @@ export class EmailService {
     html: string;
   }) {
     try {
+      if (!this.emailActive) {
+        return { success: true };
+      }
       await this.transporter.sendMail({
         from: this.emailFrom,
         to,

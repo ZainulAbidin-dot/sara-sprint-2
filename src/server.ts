@@ -12,6 +12,7 @@ import { connectDB } from '@/config/database.js';
 import { getPublicPath } from '@/lib/utils.js';
 
 import AuthRouter from '@/routes/auth.routes.js';
+import ChatRouter from '@/routes/chat.routes.js';
 import DiseaseRouter from '@/routes/disease.routes.js';
 import DoctorRouter from '@/routes/doctor.routes.js';
 import DonationRouter from '@/routes/donation.routes.js';
@@ -72,6 +73,7 @@ app.use('/api/labs', LabRouter);
 app.use('/api/users', UserRouter);
 app.use('/api/donations', DonationRouter);
 app.use('/api/notifications', NotificationsRouter);
+app.use('/api/chat', ChatRouter);
 
 // middleware to handle errors
 app.use(errorHandler);
