@@ -52,7 +52,7 @@
       const data = {
         userId: doctorId,
       };
-      const response = await postData('/api/match', data);
+      const response = await postData('/api/matches', data);
       if (response.isOk) {
         window.location.href = `PFinalConfirm.html?doctorId=${doctorId}`;
       } else {

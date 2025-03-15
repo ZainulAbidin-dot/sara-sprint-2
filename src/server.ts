@@ -14,6 +14,7 @@ import { getPublicPath } from '@/lib/utils.js';
 import AuthRouter from '@/routes/auth.routes.js';
 import DiseaseRouter from '@/routes/disease.routes.js';
 import DoctorRouter from '@/routes/doctor.routes.js';
+import LabRouter from '@/routes/lab.routes.js';
 import MatchRouter from '@/routes/match.routes.js';
 import PatientRouter from '@/routes/patient.routes.js';
 
@@ -59,7 +60,8 @@ app.use('/api/auth', AuthRouter);
 app.use('/api/diseases', DiseaseRouter);
 app.use('/api/patients', PatientRouter);
 app.use('/api/doctors', DoctorRouter);
-app.use('/api/match', MatchRouter);
+app.use('/api/matches', MatchRouter);
+app.use('/api/labs', LabRouter);
 
 // middleware to handle errors
 app.use(errorHandler);

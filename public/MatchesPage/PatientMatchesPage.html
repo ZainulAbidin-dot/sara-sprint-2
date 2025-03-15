@@ -148,7 +148,7 @@
     */
 
     async function init() {
-      const matchesResponse = await fetchData('/api/match/my-matches');
+      const matchesResponse = await fetchData('/api/matches/my-matches');
       console.log(matchesResponse);
 
       if (!matchesResponse.isOk) {

@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { MatchModel } from '@/models/match.model.js';
 import { PatientMedicalHistoryModel } from '@/models/medicalHistory.model.js';
 import { PatientModel } from '@/models/patient.model.js';
-import { UserModel } from '@/models/user.model.js';
 
 import { ApiSuccessResponse } from '@/lib/api-response.js';
 import { AppRequestHandler } from '@/lib/app-request-handler.js';

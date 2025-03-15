@@ -48,7 +48,7 @@
           patientName.innerText = patientData.data.name;
         }
       } else if (matchId) {
-        const matchData = await fetchData(`/api/match/${matchId}`);
+        const matchData = await fetchData(`/api/matches/${matchId}`);
         if (matchData.isOk) {
           const patientName = document.getElementById('name');
           patientName.innerText = matchData.data.name;
@@ -61,14 +61,14 @@
 
     async function handleConfirm() {
       if (patientId) {
-        const response = await postData('/api/match', { userId: patientId });
+        const response = await postData('/api/matches', { userId: patientId });
         if (response.isOk) {
           window.location.href = `DrConfrimMatchFinal.html?patientId=${patientId}`;
         } else {
           alert(response.message);
         }
       } else if (matchId) {
-        const response = await postData(`/api/match/${matchId}/confirm`);
+        const response = await postData(`/api/matches/${matchId}/confirm`);
         if (response.isOk) {
           window.location.href = `DrConfrimMatchFinal.html?matchId=${matchId}`;
         } else {

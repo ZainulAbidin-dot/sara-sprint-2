@@ -11,7 +11,7 @@ export interface ITrial extends Document {
 const TrialSchema = new Schema<ITrial>(
   {
     conductedBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Doctor',
       required: true,
     },

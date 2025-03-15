@@ -9,13 +9,13 @@ export class ApiSuccessResponse<T> {
   cookies?: { name: string; value: string; options: CookieOptions }[];
 
   constructor({
-    statusCode,
-    message,
+    statusCode = 200,
+    message = 'Success',
     data,
     cookies,
   }: {
-    statusCode: number;
-    message: string;
+    statusCode?: number;
+    message?: string;
     data: T;
     cookies?: { name: string; value: string; options: CookieOptions }[];
   }) {
