@@ -46,7 +46,7 @@ const doctorSchema = z.object({
   specialization: z.string(),
   institute: z.string(),
   pointOfContact: z.string(),
-  license: z.string(),
+  license: z.string().optional(),
 });
 
 const trialSchema = z
@@ -56,21 +56,34 @@ const trialSchema = z
     trialStart: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format')
-      .transform((val) => new Date(val)),
+      .transform((val) => new Date(val))
+      .optional(),
     trialEnd: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format')
-      .transform((val) => new Date(val)),
+      .transform((val) => new Date(val))
+      .optional(),
     riskLevel: z.enum(['low', 'medium', 'high']),
   })
-  .refine((data) => data.trialStart < data.trialEnd, {
-    message: 'Trial start date should be before trial end date',
-    path: ['trialEnd'],
-  })
+  .refine(
+    (data) => {
+      if (data.trialStart && data.trialEnd) {
+        return data.trialStart < data.trialEnd;
+      }
+      return true;
+    },
+    {
+      message: 'Trial start date should be before trial end date',
+      path: ['trialEnd'],
+    }
+  )
   .transform((data) => {
     return {
       ...data,
-      duration: data.trialEnd.getTime() - data.trialStart.getTime(), // Duration in milliseconds
+      duration:
+        data.trialStart && data.trialEnd
+          ? data.trialEnd.getTime() - data.trialStart.getTime()
+          : undefined,
     };
   });
 

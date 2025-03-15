@@ -6,7 +6,7 @@ import HttpError from './http-error.js';
 
 export async function checkAuth(
   request: Request,
-  userType: 'patient' | 'doctor' | 'donorAcquirer'
+  userType: 'patient' | 'doctor' | 'donorAcquirer' | 'any'
 ) {
   const userId = request.session?.userId;
   if (!userId) {
@@ -17,7 +17,7 @@ export async function checkAuth(
     });
   }
 
-  const user = await UserModel.findById(userId);
+  const user = await UserModel.findById(userId).select('-password');
 
   if (!user) {
     throw new HttpError({
@@ -25,6 +25,10 @@ export async function checkAuth(
       statusCode: 401,
       name: 'Unauthorized',
     });
+  }
+
+  if (userType === 'any') {
+    return user;
   }
 
   if (user.userType !== userType) {

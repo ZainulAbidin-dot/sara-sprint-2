@@ -19,6 +19,9 @@ async function seedDatabase() {
     } else {
       console.error('❌ MongoDB connection failed:', error);
     }
+  } finally {
+    // Disconnect from MongoDB
+    await mongoose.disconnect();
   }
 }
 

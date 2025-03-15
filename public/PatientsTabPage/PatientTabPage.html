@@ -313,33 +313,33 @@
         }
 
         patients.forEach((patient) => {
-          const patientDateOFBirth = new Date(patient.user?.dateOfBirth);
-          const age =
-            new Date().getFullYear() - patientDateOFBirth.getFullYear();
-
           const card = document.createElement('div');
           card.classList.add('card');
-          card.setAttribute('data-age', age);
+          card.setAttribute('data-age', patient.user.age);
           card.setAttribute('data-gender', patient.user?.gender);
           card.setAttribute(
             'data-disease',
             patient.medicalHistory?.disease?.name
           );
 
-          card.appendChild(createInfoElement('Age', age));
+          card.appendChild(createInfoElement('Age', patient.user.age));
           card.appendChild(createInfoElement('Gender', patient.user.gender));
           card.appendChild(
-            createInfoElement('Disease', patient.medicalHistory?.disease?.name)
+            createInfoElement('Disease', patient.medicalHistory.disease)
           );
-          card.appendChild(createInfoElement('Allergies', patient.allergies));
-          card.appendChild(createInfoElement('Region', patient.user?.region));
+          card.appendChild(
+            createInfoElement('Allergies', patient.profile.allergies)
+          );
+          card.appendChild(createInfoElement('Region', patient.user.region));
           card.appendChild(
             createInfoElement(
               'Medical History',
               patient.medicalHistory?.medicalHistory
             )
           );
-          card.appendChild(createInfoElement('Life style', patient.lifestyle));
+          card.appendChild(
+            createInfoElement('Life style', patient.profile.lifestyle)
+          );
 
           const buttons = document.createElement('div');
           buttons.classList.add('buttons');

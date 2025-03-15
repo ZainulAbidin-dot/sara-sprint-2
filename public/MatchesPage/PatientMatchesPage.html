@@ -191,6 +191,7 @@
         createInfoElement('specialization', match.profile.specialization)
       );
       card.appendChild(createInfoElement('riskLevel', match.profile.riskLevel));
+      card.appendChild(createInfoElement('Status', match.status)); // Newly added information
 
       if (match.sentByMe) {
         const info = document.createElement('p');

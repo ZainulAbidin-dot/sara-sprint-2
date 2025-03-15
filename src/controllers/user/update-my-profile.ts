@@ -13,6 +13,7 @@ import { UserModel } from '@/models/user.model.js';
 
 import { ApiSuccessResponse } from '@/lib/api-response.js';
 import { AppRequestHandler } from '@/lib/app-request-handler.js';
+import { checkAuth } from '@/lib/check-auth.js';
 import { handleBase64Upload } from '@/lib/file-upload.js';
 import HttpError from '@/lib/http-error.js';
 
@@ -24,34 +25,29 @@ const requestHandler: AppRequestHandler<TUpdateRequest> = async ({
   request,
   requestBody,
 }) => {
-  const existingUser = await UserModel.findOne({
-    email: requestBody.userDetails.email,
-  });
+  const authUser = await checkAuth(request, 'any');
 
-  if (!existingUser) {
+  if (authUser.userType !== requestBody.userType) {
     throw new HttpError({
-      message: 'User not found',
-      statusCode: 404,
-      name: 'NotFoundError',
+      message: 'User type mismatch',
+      statusCode: 400,
+      name: 'BadRequestError',
     });
   }
 
-  // Hash password if it is being updated
-  if (requestBody.userDetails.password) {
-    const hashedPassword = await bcrypt.hash(
-      requestBody.userDetails.password,
-      10
-    );
-    requestBody.userDetails.password = hashedPassword;
-  }
+  const hashedPassword = await bcrypt.hash(
+    requestBody.userDetails.password,
+    10
+  );
+  requestBody.userDetails.password = hashedPassword;
 
   let user: mongoose.Document | null = null;
   if (requestBody.userType === 'patient') {
-    user = await handlePatientUpdate(requestBody, existingUser);
+    user = await handlePatientUpdate(requestBody, authUser);
   } else if (requestBody.userType === 'doctor') {
-    user = await handleDoctorUpdate(requestBody, existingUser);
+    user = await handleDoctorUpdate(requestBody, authUser);
   } else if (requestBody.userType === 'donorAcquirer') {
-    user = await handleDonorAcquirerUpdate(requestBody, existingUser);
+    user = await handleDonorAcquirerUpdate(requestBody, authUser);
   } else {
     throw new HttpError({
       message: 'Invalid user type',
@@ -79,7 +75,7 @@ const requestHandler: AppRequestHandler<TUpdateRequest> = async ({
   }
 };
 
-export const updateController = {
+export const updateMyProfile = {
   requestSchema,
   requestHandler,
 };
@@ -111,7 +107,12 @@ async function handlePatientUpdate(
   try {
     session.startTransaction();
 
-    await existingUser.updateOne(data.userDetails, { session });
+    // await existingUser.updateOne(data.userDetails, { session });
+    await UserModel.findOneAndUpdate(
+      { _id: existingUser._id },
+      data.userDetails,
+      { session }
+    );
 
     const patient = await PatientModel.findOneAndUpdate(
       { user: existingUser._id },
@@ -160,7 +161,11 @@ async function handleDoctorUpdate(
   try {
     session.startTransaction();
 
-    await existingUser.updateOne(data.userDetails, { session });
+    await UserModel.findOneAndUpdate(
+      { _id: existingUser._id },
+      data.userDetails,
+      { session }
+    );
 
     const doctor = await DoctorModel.findOneAndUpdate(
       { user: existingUser._id },
@@ -202,7 +207,11 @@ async function handleDonorAcquirerUpdate(
   try {
     session.startTransaction();
 
-    await existingUser.updateOne(data.userDetails, { session });
+    await UserModel.findOneAndUpdate(
+      { _id: existingUser._id },
+      data.userDetails,
+      { session }
+    );
 
     await DonorAcquirerModel.findOneAndUpdate(
       { user: existingUser._id },

@@ -20,9 +20,17 @@
         document.addEventListener('DOMContentLoaded', () => {
           const urlParams = new URLSearchParams(window.location.search);
           const patientId = urlParams.get('patientId');
+          const matchId = urlParams.get('matchId');
           if (patientId) {
             document.getElementById('confirm-link').href =
               `DrContactInfo.html?patientId=${patientId}`;
+            document.getElementById('cancel-link').href =
+              `../MatchesPage/DrMatches.html`;
+          }
+
+          if (matchId) {
+            document.getElementById('confirm-link').href =
+              `DrContactInfo.html?matchId=${matchId}`;
             document.getElementById('cancel-link').href =
               `../MatchesPage/DrMatches.html`;
           }

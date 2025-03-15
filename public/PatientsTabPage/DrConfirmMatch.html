@@ -63,14 +63,14 @@
       if (patientId) {
         const response = await postData('/api/matches', { userId: patientId });
         if (response.isOk) {
-          window.location.href = `DrConfrimMatchFinal.html?patientId=${patientId}`;
+          window.location.href = `PatientTabPage.html`;
         } else {
           alert(response.message);
         }
       } else if (matchId) {
         const response = await postData(`/api/matches/${matchId}/confirm`);
         if (response.isOk) {
-          window.location.href = `DrConfrimMatchFinal.html?matchId=${matchId}`;
+          window.location.href = `PatientTabPage.html`;
         } else {
           alert(response.message);
         }

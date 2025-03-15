@@ -1,6 +1,4 @@
-import mongoose from 'mongoose';
-
-import DiseaseType from '../../src/models/disease-type.model.js';
+import { DiseaseTypeModel } from '../../src/models/disease-type.model.js';
 
 const diseaseTypes = [
   { name: "Alzheimer's Disease", type: 'Neurological Disorders' },
@@ -33,7 +31,8 @@ const diseaseTypes = [
 
 export async function seedDiseaseTypes() {
   try {
-    await DiseaseType.insertMany(diseaseTypes);
+    await DiseaseTypeModel.deleteMany({});
+    await DiseaseTypeModel.insertMany(diseaseTypes);
     console.log('Disease types seeded successfully');
   } catch (error) {
     console.error('Error seeding disease types:', error);

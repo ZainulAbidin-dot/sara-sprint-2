@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { MatchModel } from '@/models/match.model.js';
 import { PatientMedicalHistoryModel } from '@/models/medicalHistory.model.js';
 import { PatientModel } from '@/models/patient.model.js';
+import { UserModel } from '@/models/user.model.js';
 
 import { ApiSuccessResponse } from '@/lib/api-response.js';
 import { AppRequestHandler } from '@/lib/app-request-handler.js';
@@ -36,29 +37,55 @@ const requestHandler: AppRequestHandler<TGetAllDiseaseRequest> = async ({
     return match.user1;
   });
 
-  const patients = await PatientModel.find({
-    user: { $nin: myMatchedUserIds },
-  })
-    .populate('user')
-    .lean();
-  const patientsWithHistory = [];
+  const patients = await UserModel.find({
+    _id: { $nin: myMatchedUserIds },
+    userType: 'patient',
+  }).lean();
+
+  const patientsWithProfiles: any[] = [];
+
+  const currentYear = new Date().getFullYear();
 
   for (const patient of patients) {
+    const patientProfile = await PatientModel.findOne({
+      user: patient._id,
+    }).lean();
+
+    if (!patientProfile) continue;
+
     const medicalHistory = await PatientMedicalHistoryModel.findOne({
-      patient: patient._id,
+      patient: patientProfile._id,
     })
       .populate('disease')
       .lean();
 
-    patientsWithHistory.push({
-      ...patient,
-      medicalHistory: medicalHistory || null,
+    if (!medicalHistory) continue;
+
+    if (!('name' in medicalHistory.disease)) continue;
+
+    patientsWithProfiles.push({
+      user: {
+        _id: patient._id,
+        name: patient.name,
+        age: currentYear - patient.dateOfBirth.getFullYear(),
+        region: patient.region,
+        gender: patient.gender,
+      },
+
+      profile: {
+        allergies: patientProfile.allergies,
+        lifestyle: patientProfile.lifestyle,
+      },
+      medicalHistory: {
+        medicalHistory: medicalHistory.medicalHistory,
+        disease: medicalHistory.disease.name,
+      },
     });
   }
 
   return new ApiSuccessResponse({
     statusCode: 200,
-    data: patientsWithHistory,
+    data: patientsWithProfiles,
     message: 'Patients fetched successfully',
   });
 };
