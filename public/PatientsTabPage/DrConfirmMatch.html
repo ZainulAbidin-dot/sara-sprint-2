@@ -16,9 +16,7 @@
       >
         Yes
       </button>
-      <a id="cancel-link" href="PatientTabPage.html">
-        <button type="button">No</button>
-      </a>
+      <button type="button" id="denyBtn">No</button>
     </div>
   </body>
   <script type="module">
@@ -26,34 +24,57 @@
 
     const urlParams = new URLSearchParams(window.location.search);
     const patientId = urlParams.get('patientId');
+    const matchId = urlParams.get('matchId');
 
-    async function init() {
+    document.addEventListener('DOMContentLoaded', init);
+
+    function init() {
+      fetchDataAndUpadeUI();
+
+      const denyBtn = document.getElementById('denyBtn');
+      denyBtn.addEventListener('click', () => {
+        window.history.back();
+      });
+
+      const confirmButton = document.getElementById('confirmButton');
+      confirmButton.addEventListener('click', handleConfirm);
+    }
+
+    async function fetchDataAndUpadeUI() {
       if (patientId) {
         const patientData = await fetchData(`/api/patients/${patientId}`);
         if (patientData.isOk) {
-          console.log(patientData.data);
           const patientName = document.getElementById('name');
           patientName.innerText = patientData.data.name;
         }
+      } else if (matchId) {
+        const matchData = await fetchData(`/api/match/${matchId}`);
+        if (matchData.isOk) {
+          const patientName = document.getElementById('name');
+          patientName.innerText = matchData.data.name;
+        }
       } else {
-        console.error('No patient ID found in the URL');
+        alert('No patient id or match id provided');
+        window.history.back();
       }
     }
 
-    init();
-
-    const confirmButton = document.getElementById('confirmButton');
-
-    confirmButton.addEventListener('click', async () => {
-      const data = {
-        userId: patientId,
-      };
-      const response = await postData('/api/match', data);
-      if (response.isOk) {
-        window.location.href = `DrConfrimMatchFinal.html?patientId=${patientId}`;
-      } else {
-        alert(response.message);
+    async function handleConfirm() {
+      if (patientId) {
+        const response = await postData('/api/match', { userId: patientId });
+        if (response.isOk) {
+          window.location.href = `DrConfrimMatchFinal.html?patientId=${patientId}`;
+        } else {
+          alert(response.message);
+        }
+      } else if (matchId) {
+        const response = await postData(`/api/match/${matchId}/confirm`);
+        if (response.isOk) {
+          window.location.href = `DrConfrimMatchFinal.html?matchId=${matchId}`;
+        } else {
+          alert(response.message);
+        }
       }
-    });
+    }
   </script>
 </html>

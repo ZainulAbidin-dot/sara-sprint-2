@@ -303,6 +303,15 @@
           patientsContainer.removeChild(patientsContainer.firstChild);
         }
 
+        if (patients.length === 0) {
+          const noPatientsMessage = document.createElement('p');
+          noPatientsMessage.textContent = 'No patients found';
+          noPatientsMessage.style.textAlign = 'center';
+          noPatientsMessage.style.gridColumn = '1 / -1';
+          patientsContainer.appendChild(noPatientsMessage);
+          return;
+        }
+
         patients.forEach((patient) => {
           const patientDateOFBirth = new Date(patient.user?.dateOfBirth);
           const age =
@@ -317,22 +326,51 @@
             patient.medicalHistory?.disease?.name
           );
 
-          card.innerHTML = `
-            <p><strong>Age: ${age}</strong></p>
-            <p><strong>Gender: ${patient.user.gender}</strong></p>
-            <p><strong>Disease: ${patient.medicalHistory?.disease?.name}</strong></p>
-            <p><strong>Allergies: ${patient.allergies}</strong></p>
-            <p><strong>Region: ${patient.user?.region}</strong></p>
-            <p><strong>Medical History: ${patient.medicalHistory?.medicalHistory}</strong></p>
-            <p><strong>Life style: ${patient.lifestyle}</strong></p>
-            <div class="buttons">
-              <a href='drconfirmmatch.html?patientId=${patient.user._id}' class="match" data-userId="${patient.user._id}">Match</a>
-              <a href='../patientsTabPage/DrInquire.html?patientId=${patient.user._id}' class="inquire" data-userId="${patient.user._id}">Inquire</a>
-            </div>
-            `;
+          card.appendChild(createInfoElement('Age', age));
+          card.appendChild(createInfoElement('Gender', patient.user.gender));
+          card.appendChild(
+            createInfoElement('Disease', patient.medicalHistory?.disease?.name)
+          );
+          card.appendChild(createInfoElement('Allergies', patient.allergies));
+          card.appendChild(createInfoElement('Region', patient.user?.region));
+          card.appendChild(
+            createInfoElement(
+              'Medical History',
+              patient.medicalHistory?.medicalHistory
+            )
+          );
+          card.appendChild(createInfoElement('Life style', patient.lifestyle));
+
+          const buttons = document.createElement('div');
+          buttons.classList.add('buttons');
+          card.appendChild(buttons);
+
+          // MATCH BUTTON
+          const matchButton = document.createElement('button');
+          matchButton.textContent = 'Match';
+          matchButton.classList.add('match');
+          matchButton.addEventListener('click', function () {
+            window.location.href = `drconfirmmatch.html?patientId=${patient.user._id}`;
+          });
+          buttons.appendChild(matchButton);
+
+          // INQUIRE BUTTON
+          const inquireButton = document.createElement('button');
+          inquireButton.textContent = 'Inquire';
+          inquireButton.classList.add('inquire');
+          inquireButton.addEventListener('click', function () {
+            window.location.href = `../patientsTabPage/DrInquire.html?patientId=${patient.user._id}`;
+          });
+          buttons.appendChild(inquireButton);
 
           patientsContainer.appendChild(card);
         });
+      }
+
+      function createInfoElement(label, value) {
+        const infoElement = document.createElement('p');
+        infoElement.innerHTML = `<strong>${label}:</strong> ${value}`;
+        return infoElement;
       }
     </script>
   </body>

@@ -53,12 +53,12 @@ const requestHandler: AppRequestHandler<TLoginRequest> = async ({
   await UserModel.updateOne({ _id: existingUser._id }, { otp });
 
   // TODO: send otp to user via email
-  const emailService = EmailService.getInstance();
-  await emailService.sendOtpEmail({
-    name: existingUser.name,
-    email: existingUser.email,
-    otp: otp,
-  });
+  // const emailService = EmailService.getInstance();
+  // await emailService.sendOtpEmail({
+  //   name: existingUser.name,
+  //   email: existingUser.email,
+  //   otp: otp,
+  // });
 
   return new ApiSuccessResponse({
     message: 'User logged in successfully',
