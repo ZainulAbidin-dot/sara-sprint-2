@@ -5,6 +5,8 @@ import { UserModel } from '@/models/user.model.js';
 
 import { ApiSuccessResponse } from '@/lib/api-response.js';
 import { AppRequestHandler } from '@/lib/app-request-handler.js';
+import { checkAuth } from '@/lib/check-auth.js';
+import { createNotification } from '@/lib/create-notification.js';
 import HttpError from '@/lib/http-error.js';
 
 const requestSchema = z.object({});
@@ -12,16 +14,9 @@ const requestSchema = z.object({});
 type TRequest = z.infer<typeof requestSchema>;
 
 const requestHandler: AppRequestHandler<TRequest> = async ({ request }) => {
-  const currentUserId = request.session.userId;
+  const authUser = await checkAuth(request, ['patient', 'doctor']);
+  const currentUserId = authUser._id;
   const { matchId } = request.params;
-
-  if (!currentUserId) {
-    throw new HttpError({
-      name: 'Unauthorized',
-      message: 'You are not authorized to access this resource',
-      statusCode: 401,
-    });
-  }
 
   const match = await MatchModel.findById(matchId);
 
@@ -45,6 +40,12 @@ const requestHandler: AppRequestHandler<TRequest> = async ({ request }) => {
   if (match.user2.toString() === currentUserId) {
     match.status = 'accepted';
     await match.save();
+
+    createNotification({
+      userId: match.user1.toString(),
+      senderId: currentUserId,
+      eventType: 'match-accept',
+    });
 
     return new ApiSuccessResponse({
       data: match,

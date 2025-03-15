@@ -5,6 +5,7 @@ import { MatchModel } from '@/models/match.model.js';
 import { ApiSuccessResponse } from '@/lib/api-response.js';
 import { AppRequestHandler } from '@/lib/app-request-handler.js';
 import { checkAuth } from '@/lib/check-auth.js';
+import { createNotification } from '@/lib/create-notification.js';
 import HttpError from '@/lib/http-error.js';
 
 const requestSchema = z.object({
@@ -44,6 +45,12 @@ const requestHandler: AppRequestHandler<TCreateMatchRequest> = async ({
   });
 
   await newMatch.save();
+
+  createNotification({
+    userId: requestBody.userId,
+    senderId: currentUserId,
+    eventType: 'match-request',
+  });
 
   return new ApiSuccessResponse({
     message: 'Match created successfully',

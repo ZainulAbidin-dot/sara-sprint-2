@@ -5,6 +5,7 @@ import { LabModel } from '@/models/lab.model.js';
 import { ApiSuccessResponse } from '@/lib/api-response.js';
 import { AppRequestHandler } from '@/lib/app-request-handler.js';
 import { checkAuth } from '@/lib/check-auth.js';
+import { createNotification } from '@/lib/create-notification.js';
 import HttpError from '@/lib/http-error.js';
 
 const requestSchema = z.object({
@@ -40,6 +41,12 @@ const requestHandler: AppRequestHandler<TRequest> = async ({
 
   await labAppointment.save();
 
+  createNotification({
+    userId: requestBody.patientId,
+    senderId: authUser._id,
+    eventType: 'lab-appointment',
+  });
+
   return new ApiSuccessResponse({
     data: labAppointment,
   });
@@ -50,6 +57,7 @@ export const createLabAppointment = {
   requestHandler,
 };
 
+//#region Helper functions
 function getBookingDateTime(
   appointmentDate: string,
   appointmentTime: string,
@@ -112,3 +120,4 @@ function getBookingDateTime(
 
   return bookingDateTime;
 }
+//#endregion Helper functions

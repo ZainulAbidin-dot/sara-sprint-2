@@ -1,6 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-// Define the interface for the Match document
 export interface IMatch extends Document {
   user1: mongoose.Types.ObjectId;
   user2: mongoose.Types.ObjectId;
@@ -10,7 +9,6 @@ export interface IMatch extends Document {
   updatedAt: Date;
 }
 
-// Create the schema
 const matchSchema = new Schema<IMatch>(
   {
     user1: {
@@ -38,5 +36,4 @@ const matchSchema = new Schema<IMatch>(
   }
 );
 
-// Create and export the model
 export const MatchModel = mongoose.model<IMatch>('Match', matchSchema);
