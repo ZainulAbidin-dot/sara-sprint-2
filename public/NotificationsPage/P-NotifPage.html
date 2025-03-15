@@ -1,87 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="NotifPage.css">
-    <link rel="stylesheet" href="../PostHeader/PostHeader.css">
- 
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="NotifPage.css" />
+    <link rel="stylesheet" href="../PostHeader/PostHeader.css" />
+  </head>
+  <body>
     <header class="header">
-        <div class="header-logo">
-            <span>T</span>ADAWI
-        </div>
-        <nav class="nav">
-            <a href="../Home/HomePage-Patient.html">Home</a>
-            <a href="../ClinicalTrialPage/CTpage.html">Clinical Trials</a>
-            <a href="../MatchesPage/PatientMatchesPage.html">Matches</a>
-            <a href="../About-us/About-usPostPatient.html">About us</a>
-            <a href="../HelpPage/Help-Patient.html">Help</a>
-            <a href="../NotificationsPage/P-NotifPage.html">Notifications</a>
-        </nav>
-        
-        <div class="buttons-container">
-            <img src=""  id="">
+      <div class="header-logo"><span>T</span>ADAWI</div>
+      <nav class="nav">
+        <a href="../Home/HomePage-Patient.html">Home</a>
+        <a href="../ClinicalTrialPage/CTpage.html">Clinical Trials</a>
+        <a href="../MatchesPage/PatientMatchesPage.html">Matches</a>
+        <a href="../About-us/About-usPostPatient.html">About us</a>
+        <a href="../HelpPage/Help-Patient.html">Help</a>
+        <a href="../NotificationsPage/P-NotifPage.html">Notifications</a>
+      </nav>
 
-            <!-- Sign Out Button -->
-            <a href="../Home/HomePage.html" id="signout-btn">
-                <button>Sign Out</button>
-            </a>
+      <div class="buttons-container">
+        <img src="" id="" />
 
-            <!-- Edit Profile Button -->
-            <a href="../EditProfile/EditProfile-Patient.html">
-                <button id="edit-btn">Edit Profile</button>
-            </a>
-        </div>
+        <!-- Sign Out Button -->
+        <a href="../Home/HomePage.html" id="signout-btn">
+          <button>Sign Out</button>
+        </a>
+
+        <!-- Edit Profile Button -->
+        <a href="../EditProfile/EditProfile-Patient.html">
+          <button id="edit-btn">Edit Profile</button>
+        </a>
+      </div>
     </header>
     <div class="notifications-container">
-        <h2>Patient Notifications</h2>
-        <button class="clear-btn" onclick="clearNotifications()">Clear All</button>
-        <ul id="patient-notifications">
-            <!-- Notifications will be populated dynamically -->
-        </ul>
+      <h2>Patient Notifications</h2>
+      <button class="clear-btn" data-clear-notifications-button>
+        Clear All
+      </button>
+      <ul id="patient-notifications" data-notifications-list></ul>
     </div>
 
     <script>
-        const patientNotifications = [
-            { type: "trial_confirmed", message: "Dr. Smith has confirmed your match to a clinical trial.", timestamp: "10 mins ago" },
-            { type: "trial_denied", message: "Dr. Adams denied your request to match a clinical trial.", timestamp: "30 mins ago" },
-            { type: "message", message: "Dr. Lee sent you a message.", timestamp: "1 hour ago" },
-            { type: "lab_booking", message: "Your lab appointment has been scheduled.", timestamp: "2 hours ago" }
-        ];
+      //underline the current tab
+      document.addEventListener('DOMContentLoaded', function () {
+        let currentLocation = window.location.pathname.split('/').pop();
+        let navLinks = document.querySelectorAll('.nav a');
 
-        function loadPatientNotifications() {
-            const container = document.getElementById("patient-notifications");
-            patientNotifications.forEach(notification => {
-                const li = document.createElement("li");
-                li.classList.add("notification-item");
-                li.innerHTML = `<strong>${notification.message}</strong><span>${notification.timestamp}</span>`;
-                container.appendChild(li);
-            });
-        }
-
-        function clearNotifications() {
-            const container = document.getElementById("patient-notifications");
-            container.innerHTML = "<li class='notification-item'>No new notifications</li>";
-            localStorage.removeItem("notifications");
-        }
-
-        document.addEventListener("DOMContentLoaded", loadPatientNotifications);
-
-        //underline the current tab
-    document.addEventListener("DOMContentLoaded", function () {
-        let currentLocation = window.location.pathname.split("/").pop();
-        let navLinks = document.querySelectorAll(".nav a");
-
-        navLinks.forEach(link => {
-            if (link.getAttribute("href").includes(currentLocation)) {
-                link.classList.add("active");
-            } else {
-                link.classList.remove("active");
-            }
+        navLinks.forEach((link) => {
+          if (link.getAttribute('href').includes(currentLocation)) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
         });
-    });
+      });
     </script>
-</body>
+  </body>
+  <script src="./notifications.js" type="module"></script>
 </html>

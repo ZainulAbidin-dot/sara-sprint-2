@@ -1,84 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="NotifPage.css">
-    <link rel="stylesheet" href="../PostHeader/PostHeader.css">
-  
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="NotifPage.css" />
+    <link rel="stylesheet" href="../PostHeader/PostHeader.css" />
+  </head>
+  <body>
     <header class="header">
-        <div class="header-logo">
-            <span>T</span>ADAWI
-        </div>
-        <nav class="nav">
-            <a href="../Home/HomePage-Donor.html">Home</a>
-            <a href="../About-us/About-usPostDonor.html">About us</a>
-            <a href="../DonationsPgae/DonationsPage.html">Donations</a>
-            <a href="../HelpPage/Help-Donor.html">Help</a>
-            <a href="../NotificationsPage/Donor-NotifPage.html">Notifications</a>
+      <div class="header-logo"><span>T</span>ADAWI</div>
+      <nav class="nav">
+        <a href="../Home/HomePage-Donor.html">Home</a>
+        <a href="../About-us/About-usPostDonor.html">About us</a>
+        <a href="../DonationsPgae/DonationsPage.html">Donations</a>
+        <a href="../HelpPage/Help-Donor.html">Help</a>
+        <a href="../NotificationsPage/Donor-NotifPage.html">Notifications</a>
+      </nav>
+      <div class="buttons-container">
+        <img src="" id="" />
 
-        </nav>
-        <div class="buttons-container">
-            <img src=""  id="">
+        <!-- Sign Out Button -->
+        <a href="../Home/HomePage.html" id="signout-btn">
+          <button>Sign Out</button>
+        </a>
 
-            <!-- Sign Out Button -->
-            <a href="../Home/HomePage.html" id="signout-btn">
-                <button>Sign Out</button>
-            </a>
-
-            <!-- Edit Profile Button -->
-            <a href="../EditProfile/EditProfile-Donor.html">
-                <button id="edit-btn">Edit Profile</button>
-            </a>
-        </div>
+        <!-- Edit Profile Button -->
+        <a href="../EditProfile/EditProfile-Donor.html">
+          <button id="edit-btn">Edit Profile</button>
+        </a>
+      </div>
     </header>
     <div class="notifications-container">
-        <h2>Donor Notifications</h2>
-        <button class="clear-btn" onclick="clearNotifications()">Clear All</button>
-        <ul id="donor-notifications">
-            <!-- Notifications will be populated dynamically -->
-        </ul>
+      <h2>Donor Notifications</h2>
+      <button class="clear-btn" data-clear-notifications-button>
+        Clear All
+      </button>
+      <ul id="donor-notifications" data-notifications-list></ul>
     </div>
 
     <script>
-        const donorNotifications = [
-            { type: "message", message: "You have a new message from a recipient.", timestamp: "15 mins ago" },
-            { type: "request", message: "A recipient has requested a donation.", timestamp: "45 mins ago" }
-        ];
+      //underline the current tab
+      document.addEventListener('DOMContentLoaded', function () {
+        let currentLocation = window.location.pathname.split('/').pop();
+        let navLinks = document.querySelectorAll('.nav a');
 
-        function loadDonorNotifications() {
-            const container = document.getElementById("donor-notifications");
-            donorNotifications.forEach(notification => {
-                const li = document.createElement("li");
-                li.classList.add("notification-item");
-                li.innerHTML = `<strong>${notification.message}</strong><span>${notification.timestamp}</span>`;
-                container.appendChild(li);
-            });
-        }
-
-        function clearNotifications() {
-            const container = document.getElementById("donor-notifications");
-            container.innerHTML = "<li class='notification-item'>No new notifications</li>";
-            localStorage.removeItem("notifications");
-        }
-
-        document.addEventListener("DOMContentLoaded", loadDonorNotifications);
-
-        //underline the current tab
-    document.addEventListener("DOMContentLoaded", function () {
-        let currentLocation = window.location.pathname.split("/").pop();
-        let navLinks = document.querySelectorAll(".nav a");
-
-        navLinks.forEach(link => {
-            if (link.getAttribute("href").includes(currentLocation)) {
-                link.classList.add("active");
-            } else {
-                link.classList.remove("active");
-            }
+        navLinks.forEach((link) => {
+          if (link.getAttribute('href').includes(currentLocation)) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
         });
-    });
+      });
     </script>
-</body>
+  </body>
+  <script src="./notifications.js" type="module"></script>
 </html>

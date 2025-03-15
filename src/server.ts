@@ -17,6 +17,7 @@ import DoctorRouter from '@/routes/doctor.routes.js';
 import DonationRouter from '@/routes/donation.routes.js';
 import LabRouter from '@/routes/lab.routes.js';
 import MatchRouter from '@/routes/match.routes.js';
+import NotificationsRouter from '@/routes/notifications.routes.js';
 import PatientRouter from '@/routes/patient.routes.js';
 import UserRouter from '@/routes/user.routes.js';
 
@@ -70,6 +71,7 @@ app.use('/api/matches', MatchRouter);
 app.use('/api/labs', LabRouter);
 app.use('/api/users', UserRouter);
 app.use('/api/donations', DonationRouter);
+app.use('/api/notifications', NotificationsRouter);
 
 // middleware to handle errors
 app.use(errorHandler);
