@@ -8,15 +8,9 @@ import { getDonorController } from '@/controllers/donation/get-single-donor.js';
 
 const router = Router();
 
-router.get(
-  '/get-all-donation',
-  requestHandlerWrapper(getAllDonationsController)
-);
-router.post(
-  '/create-donation',
-  requestHandlerWrapper(createDonationController)
-);
+router.get('/', requestHandlerWrapper(getAllDonationsController));
+router.post('/', requestHandlerWrapper(createDonationController));
 
-router.get('/:donorId', requestHandlerWrapper(getDonorController));
+router.get('/get-donor/:donorId', requestHandlerWrapper(getDonorController));
 
 export default router;

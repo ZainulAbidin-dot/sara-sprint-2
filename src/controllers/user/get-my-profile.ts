@@ -1,6 +1,8 @@
 import { z } from 'zod';
 
 import { DoctorModel } from '@/models/doctor.model.js';
+import { DonorAcquirerModel } from '@/models/donor.model.js';
+import { PatientMedicalHistoryModel } from '@/models/medicalHistory.model.js';
 import { PatientModel } from '@/models/patient.model.js';
 import { TrialModel } from '@/models/trial.model.js';
 import { UserModel } from '@/models/user.model.js';
@@ -15,7 +17,11 @@ const requestSchema = z.object({});
 type TRequest = z.infer<typeof requestSchema>;
 
 const requestHandler: AppRequestHandler<TRequest> = async ({ request }) => {
-  const authUser = await checkAuth(request, 'any');
+  const authUser = await checkAuth(request, [
+    'doctor',
+    'patient',
+    'donorAcquirer',
+  ]);
 
   if (authUser.userType === 'doctor') {
     const doctorProfile = await DoctorModel.findOne({
@@ -39,6 +45,55 @@ const requestHandler: AppRequestHandler<TRequest> = async ({ request }) => {
         user: authUser,
         doctorProfile,
         doctorTrials,
+      },
+    });
+  }
+
+  if (authUser.userType === 'donorAcquirer') {
+    const donorAcquirerProfile = await DonorAcquirerModel.findOne({
+      user: authUser._id,
+    }).lean();
+
+    if (!donorAcquirerProfile) {
+      throw new HttpError({
+        message: 'Donor/Acquirer profile not found',
+        statusCode: 404,
+        name: 'NotFound',
+      });
+    }
+
+    return new ApiSuccessResponse({
+      data: {
+        user: authUser,
+        donorAcquirerProfile,
+      },
+    });
+  }
+
+  if (authUser.userType === 'patient') {
+    const patientProfile = await PatientModel.findOne({
+      user: authUser._id,
+    }).lean();
+
+    if (!patientProfile) {
+      throw new HttpError({
+        message: 'Patient profile not found',
+        statusCode: 404,
+        name: 'NotFound',
+      });
+    }
+
+    const medicalHistory = await PatientMedicalHistoryModel.findOne({
+      patient: patientProfile._id,
+    })
+
+      .lean();
+
+    return new ApiSuccessResponse({
+      data: {
+        user: authUser,
+        patientProfile,
+        medicalHistory,
       },
     });
   }

@@ -14,6 +14,7 @@ import { getPublicPath } from '@/lib/utils.js';
 import AuthRouter from '@/routes/auth.routes.js';
 import DiseaseRouter from '@/routes/disease.routes.js';
 import DoctorRouter from '@/routes/doctor.routes.js';
+import DonationRouter from '@/routes/donation.routes.js';
 import LabRouter from '@/routes/lab.routes.js';
 import MatchRouter from '@/routes/match.routes.js';
 import PatientRouter from '@/routes/patient.routes.js';
@@ -30,7 +31,11 @@ connectDB();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Middleware
-app.use(express.json());
+app.use(
+  express.json({
+    limit: '5mb',
+  })
+);
 
 // Setup express-session with existing Mongoose connection
 app.use(
@@ -64,6 +69,7 @@ app.use('/api/doctors', DoctorRouter);
 app.use('/api/matches', MatchRouter);
 app.use('/api/labs', LabRouter);
 app.use('/api/users', UserRouter);
+app.use('/api/donations', DonationRouter);
 
 // middleware to handle errors
 app.use(errorHandler);

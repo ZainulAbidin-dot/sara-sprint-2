@@ -10,7 +10,6 @@ export async function checkAuth(
     | 'patient'
     | 'doctor'
     | 'donorAcquirer'
-    | 'any'
     | Array<'patient' | 'doctor' | 'donorAcquirer'>
 ) {
   const userId = request.session?.userId;
@@ -30,10 +29,6 @@ export async function checkAuth(
       statusCode: 401,
       name: 'Unauthorized',
     });
-  }
-
-  if (userType === 'any') {
-    return user;
   }
 
   if (Array.isArray(userType)) {

@@ -9,9 +9,11 @@ import { checkAuth } from '@/lib/check-auth.js';
 const requestSchema = z.object({});
 
 const getAllDonationsHandler: AppRequestHandler<any> = async ({ request }) => {
-  await checkAuth(request, ['donorAcquirer']);
+  const authUser = await checkAuth(request, ['donorAcquirer']);
 
-  const donations = await DonationModel.find();
+  const donations = await DonationModel.find({
+    // userId: { $ne: authUser._id },
+  });
 
   return new ApiSuccessResponse({
     message: 'Donations fetched successfully',

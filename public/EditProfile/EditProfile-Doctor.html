@@ -529,7 +529,10 @@
   </body>
 
   <script type="module">
+    import { handleFileUpload } from '/js/file-upload.js';
     import { fetchData, updateData } from '/js/http-calls.js';
+
+    const SUCCESS_URL = '/EditProfile/Dr-confirmEdit.html';
 
     document.addEventListener('DOMContentLoaded', init);
 
@@ -607,6 +610,7 @@
 
       if (updateResponse.isOk) {
         alert('Profile updated successfully!');
+        window.location.href = SUCCESS_URL;
       } else {
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error';

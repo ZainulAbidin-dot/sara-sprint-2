@@ -25,7 +25,11 @@ const requestHandler: AppRequestHandler<TUpdateRequest> = async ({
   request,
   requestBody,
 }) => {
-  const authUser = await checkAuth(request, 'any');
+  const authUser = await checkAuth(request, [
+    'doctor',
+    'patient',
+    'donorAcquirer',
+  ]);
 
   if (authUser.userType !== requestBody.userType) {
     throw new HttpError({
@@ -41,13 +45,12 @@ const requestHandler: AppRequestHandler<TUpdateRequest> = async ({
   );
   requestBody.userDetails.password = hashedPassword;
 
-  let user: mongoose.Document | null = null;
   if (requestBody.userType === 'patient') {
-    user = await handlePatientUpdate(requestBody, authUser);
+    await handlePatientUpdate(requestBody, authUser);
   } else if (requestBody.userType === 'doctor') {
-    user = await handleDoctorUpdate(requestBody, authUser);
+    await handleDoctorUpdate(requestBody, authUser);
   } else if (requestBody.userType === 'donorAcquirer') {
-    user = await handleDonorAcquirerUpdate(requestBody, authUser);
+    await handleDonorAcquirerUpdate(requestBody, authUser);
   } else {
     throw new HttpError({
       message: 'Invalid user type',
@@ -56,23 +59,11 @@ const requestHandler: AppRequestHandler<TUpdateRequest> = async ({
     });
   }
 
-  if (user) {
-    const { password, ...userDetails } = user.toObject();
-
-    return new ApiSuccessResponse({
-      message: 'User updated successfully',
-      data: {
-        user: userDetails,
-      },
-      statusCode: 200,
-    });
-  } else {
-    throw new HttpError({
-      message: 'User update failed',
-      statusCode: 500,
-      name: 'InternalServerError',
-    });
-  }
+  return new ApiSuccessResponse({
+    message: 'User updated successfully',
+    statusCode: 200,
+    data: null,
+  });
 };
 
 export const updateMyProfile = {
@@ -135,8 +126,6 @@ async function handlePatientUpdate(
     );
 
     await session.commitTransaction();
-
-    return existingUser;
   } catch (error) {
     await session.abortTransaction();
     throw error;
@@ -188,8 +177,6 @@ async function handleDoctorUpdate(
     }
 
     await session.commitTransaction();
-
-    return existingUser;
   } catch (error) {
     await session.abortTransaction();
     throw error;
@@ -220,8 +207,6 @@ async function handleDonorAcquirerUpdate(
     );
 
     await session.commitTransaction();
-
-    return existingUser;
   } catch (error) {
     await session.abortTransaction();
     throw error;

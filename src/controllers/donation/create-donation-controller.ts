@@ -5,12 +5,11 @@ import { DonationModel } from '@/models/donation.model.js';
 import { ApiSuccessResponse } from '@/lib/api-response.js';
 import { AppRequestHandler } from '@/lib/app-request-handler.js';
 import { checkAuth } from '@/lib/check-auth.js';
-import HttpError from '@/lib/http-error.js';
 
 const requestSchema = z.object({
   equipmentName: z.string(),
   equipmentDescription: z.string(),
-  yearsOfUse: z.number().positive(),
+  yearsOfUse: z.coerce.number().positive(),
   warrantyDetails: z.string().optional(),
   defects: z.string().optional(),
   pointOfContact: z.string(),
@@ -28,13 +27,7 @@ const requestHandler: AppRequestHandler<TCreateDonationRequest> = async ({
   const currentUserId = authUser._id;
 
   const newDonation = new DonationModel({
-    equipmentName: requestBody.equipmentName,
-    equipmentDescription: requestBody.equipmentDescription,
-    yearsOfUse: requestBody.yearsOfUse,
-    warrantyDetails: requestBody.warrantyDetails,
-    defects: requestBody.defects,
-    pointOfContact: requestBody.pointOfContact,
-    details: requestBody.details,
+    ...requestBody,
     userId: currentUserId,
   });
 
