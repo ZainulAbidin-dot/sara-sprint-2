@@ -4,6 +4,7 @@ import { MatchModel } from '@/models/match.model.js';
 
 import { ApiSuccessResponse } from '@/lib/api-response.js';
 import { AppRequestHandler } from '@/lib/app-request-handler.js';
+import { checkAuth } from '@/lib/check-auth.js';
 import HttpError from '@/lib/http-error.js';
 
 const requestSchema = z.object({
@@ -16,15 +17,9 @@ const requestHandler: AppRequestHandler<TCreateMatchRequest> = async ({
   request,
   requestBody,
 }) => {
-  const currentUserId = request.session.userId;
+  const authUser = await checkAuth(request, ['patient', 'doctor']);
 
-  if (!currentUserId) {
-    throw new HttpError({
-      message: 'Unauthorized',
-      statusCode: 401,
-      name: 'UnauthorizedError',
-    });
-  }
+  const currentUserId = authUser._id;
 
   // check if the match already exists between the users
   const existingMatch = await MatchModel.findOne({
@@ -45,7 +40,7 @@ const requestHandler: AppRequestHandler<TCreateMatchRequest> = async ({
   const newMatch = new MatchModel({
     user1: currentUserId,
     user2: requestBody.userId,
-    status: 'pending',
+    status: authUser.userType === 'doctor' ? 'accepted' : 'pending',
   });
 
   await newMatch.save();

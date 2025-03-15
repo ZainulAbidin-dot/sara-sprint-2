@@ -166,49 +166,62 @@
       card.appendChild(createInfoElement('Age', match.profile.age));
       card.appendChild(createInfoElement('Disease', match.profile.disease));
       card.appendChild(createInfoElement('Region', match.profile.region));
-      card.appendChild(createInfoElement('Status', match.status));
 
-      if (match.sentByMe) {
-        const info = document.createElement('p');
-        info.innerHTML = 'You sent this match';
-        card.appendChild(info);
-        return card;
-      }
+      if (match.status === 'pending' && !match.sentByMe) {
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.classList.add('buttons');
 
-      if (match.status === 'pending') {
-        const buttons = document.createElement('div');
-        buttons.classList.add('buttons');
+        const confirmButton = createActionButton(
+          '✅ Confirm & Contact',
+          'confirm-btn',
+          () => {
+            window.location.href = `../patientstabpage/drconfirmmatch.html?matchId=${match.matchId}`;
+          }
+        );
 
-        const confirmButton = document.createElement('button');
-        confirmButton.classList.add('Confirm');
-        confirmButton.innerHTML = 'Confirm & Contact';
-        confirmButton.addEventListener('click', function () {
-          window.location.href =
-            '../patientstabpage/drconfirmmatch.html?matchId=' + match.matchId;
+        const denyButton = createActionButton('❌ Deny', 'deny-btn', () => {
+          window.location.href = `drdenymatch.html?matchId=${match.matchId}`;
         });
 
-        const denyButton = document.createElement('button');
-        denyButton.classList.add('Deny');
-        denyButton.innerHTML = 'Deny';
-        denyButton.addEventListener('click', function () {
-          window.location.href =
-            '../matchespage/Drdenymatch.html?matchId=' + match.matchId;
-        });
-
-        buttons.appendChild(confirmButton);
-        buttons.appendChild(denyButton);
-
-        card.appendChild(buttons);
-
-        return card;
+        buttonsContainer.appendChild(confirmButton);
+        buttonsContainer.appendChild(denyButton);
+        card.appendChild(buttonsContainer);
       }
 
       if (match.status === 'accepted') {
-        const info = document.createElement('p');
-        info.innerHTML = 'Match confirmed';
+        const info = createStatusMessage('✅ Match confirmed', 'success');
         card.appendChild(info);
-        return card;
       }
+
+      if (match.status === 'rejected') {
+        const info = createStatusMessage('❌ Match denied', 'error');
+        card.appendChild(info);
+      }
+
+      if (match.sentByMe) {
+        const info = document.createElement('p');
+        info.classList.add('match-info');
+        info.innerHTML = '📤 You sent this match request';
+        card.appendChild(info);
+      }
+
+      return card;
+    }
+
+    function createActionButton(label, className, onClick) {
+      const button = document.createElement('button');
+      button.classList.add(className);
+      button.innerHTML = label;
+      button.addEventListener('click', onClick);
+      return button;
+    }
+
+    function createStatusMessage(message, type) {
+      const info = document.createElement('p');
+      info.classList.add('match-info');
+      info.classList.add(type);
+      info.innerHTML = message;
+      return info;
     }
 
     function createInfoElement(label, value) {

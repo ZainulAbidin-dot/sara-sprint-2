@@ -6,7 +6,12 @@ import HttpError from './http-error.js';
 
 export async function checkAuth(
   request: Request,
-  userType: 'patient' | 'doctor' | 'donorAcquirer' | 'any'
+  userType:
+    | 'patient'
+    | 'doctor'
+    | 'donorAcquirer'
+    | 'any'
+    | Array<'patient' | 'doctor' | 'donorAcquirer'>
 ) {
   const userId = request.session?.userId;
   if (!userId) {
@@ -28,6 +33,18 @@ export async function checkAuth(
   }
 
   if (userType === 'any') {
+    return user;
+  }
+
+  if (Array.isArray(userType)) {
+    if (!userType.includes(user.userType)) {
+      throw new HttpError({
+        message: 'You do not have permission to access this resource',
+        statusCode: 403,
+        name: 'Unauthorized',
+      });
+    }
+
     return user;
   }
 

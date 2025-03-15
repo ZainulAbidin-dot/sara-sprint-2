@@ -191,49 +191,43 @@
         createInfoElement('specialization', match.profile.specialization)
       );
       card.appendChild(createInfoElement('riskLevel', match.profile.riskLevel));
-      card.appendChild(createInfoElement('Status', match.status)); // Newly added information
+
+      if (match.status === 'accepted') {
+        const info = createStatusMessage('✅ Match confirmed', 'success');
+        card.appendChild(info);
+      }
+
+      if (match.status === 'rejected') {
+        const info = createStatusMessage('❌ Match denied', 'error');
+        card.appendChild(info);
+      }
 
       if (match.sentByMe) {
         const info = document.createElement('p');
-        info.innerHTML = 'You sent this match';
+        info.classList.add('match-info');
+        info.innerHTML = '📤 You sent this match request';
         card.appendChild(info);
-        return card;
       }
 
-      if (match.status === 'pending') {
-        const buttons = document.createElement('div');
-        buttons.classList.add('buttons');
+      // TODO: ADD BUTTON TO GO TO CHAT PAGE
 
-        const confirmButton = document.createElement('button');
-        confirmButton.classList.add('Confirm');
-        confirmButton.innerHTML = 'Confirm & Contact';
-        confirmButton.addEventListener('click', function () {
-          window.location.href =
-            '../patientstabpage/drconfirmmatch.html?matchId=' + match.matchId;
-        });
+      return card;
+    }
 
-        const denyButton = document.createElement('button');
-        denyButton.classList.add('Deny');
-        denyButton.innerHTML = 'Deny';
-        denyButton.addEventListener('click', function () {
-          window.location.href =
-            '../matchespage/Drdenymatch.html?matchId=' + match.matchId;
-        });
+    function createActionButton(label, className, onClick) {
+      const button = document.createElement('button');
+      button.classList.add(className);
+      button.innerHTML = label;
+      button.addEventListener('click', onClick);
+      return button;
+    }
 
-        buttons.appendChild(confirmButton);
-        buttons.appendChild(denyButton);
-
-        card.appendChild(buttons);
-
-        return card;
-      }
-
-      if (match.status === 'accepted') {
-        const info = document.createElement('p');
-        info.innerHTML = 'Match confirmed';
-        card.appendChild(info);
-        return card;
-      }
+    function createStatusMessage(message, type) {
+      const info = document.createElement('p');
+      info.classList.add('match-info');
+      info.classList.add(type);
+      info.innerHTML = message;
+      return info;
     }
 
     function createInfoElement(label, value) {

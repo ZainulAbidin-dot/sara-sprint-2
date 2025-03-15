@@ -177,6 +177,13 @@
           container.removeChild(container.firstChild);
         }
 
+        if (doctors.length === 0) {
+          const noDoctors = document.createElement('p');
+          noDoctors.innerHTML = 'No doctors found.';
+          container.appendChild(noDoctors);
+          return;
+        }
+
         doctors.forEach((doctor) => {
           const card = document.createElement('div');
           card.classList.add('card');
