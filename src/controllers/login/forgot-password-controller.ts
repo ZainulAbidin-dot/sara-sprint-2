@@ -3,12 +3,9 @@ import { z } from 'zod';
 
 import { UserModel } from '@/models/user.model.js';
 
-import { EmailService } from '@/services/email-service.js';
-
 import { ApiSuccessResponse } from '@/lib/api-response.js';
 import { AppRequestHandler } from '@/lib/app-request-handler.js';
 import HttpError from '@/lib/http-error.js';
-import { generateOTP } from '@/lib/utils.js';
 
 const requestSchema = z.object({
   email: z.string().email(),
@@ -39,14 +36,6 @@ const requestHandler: AppRequestHandler<TForgotPasswordRequest> = async ({
     { _id: existingUser._id },
     { password: hashedPassword }
   );
-
-  // TODO: send otp to user via email
-  //   const emailService = EmailService.getInstance();
-  //   emailService.sendOtpEmail({
-  //     name: existingUser.name,
-  //     email: existingUser.email,
-  //     otp: otp,
-  //   });
 
   return new ApiSuccessResponse({
     message: 'Password reset successfully',
